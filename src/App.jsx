@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import Hero from "./commponent/Hero";
+import ParentClass from "./commponent/ParentClass";
+import axios from "axios";
 
 let loging = (status) => {
   if (status) {
@@ -10,59 +13,56 @@ let loging = (status) => {
 
 const App = () => {
   let mark = 80;
-  let x=true;
+  let x = true;
 
   let array = ["dhaka", "mohammadpur", "Modhukhali", "Boalmari", "Faridpur"];
+
+  let [inpu, Stateinpu] = useState(false);
+  let [mainvalue, Statemainvalue] = useState(null);
+
+  const inputHandel = (val) => {
+    Statemainvalue(val.target.value);
+    console.log(val.target.value);
+  };
+   const [data, setData] = useState([]);
+   useEffect(()=>{
+    axios.get("https://dummyjson.com/products?&limit=0").then((res)=>{
+      setData(res.data.products)
+      
+      
+    })
+   })
+   let [filterData,usefilterData]= useState([])
+  
+   const [filterdata,setfiltedata]=useState([]);
+   const filters=()=>{
+   let usefilterData = data.filter((item)=>{
+  return item.title.includes({mainvalue});
+   })
+
+  
+   
+    
+ }
+ console.log(filterData);
+ 
+   
+    
+
+
+
   return (
-    <>
-      <h2
-        style={{
-          color: "yellow",
-          backgroundColor: "black",
-          width: "200px",
-          textAlign: "center",
-          padding: "10px 20px",
-        }}
-      >
-        Habu
-      </h2>
-      {mark >= 80 ? <h2>Good student</h2> : <h2>Avarage Student</h2>}
-      {/* immediately-invoked funtion */}
-      {(() => {
-        if (mark >= 80 && mark < 100) {
-          return <h3>A+</h3>;
-        } else if (mark > 70 && mark < 80) {
-          return <h4>A</h4>;
-        }
-      })()}
-
-      <ul>
-        {array.map((item, index) => {
-          return <li key={index.toString()}>{item}</li>;
-        })}
-      </ul>
-
-      <h2>Loging Section</h2>
-      {loging(false)}
-
-          {/* && test */}
-
-          {x && <button>LogOut</button>}
-
-        {/* immediately invoked function  */}
-
-        {(()=>{
-          if(x){
-            return <button>okay All right</button>
-          }else{
-            return <button>Your Value is false all right</button>
+    <section>
+      <div>
+        <p>
+          {
+            inpu ? <h3>{mainvalue}</h3>: null
           }
-
-        })()}
-
-        <Hero />
-
-    </>
+        </p>
+        <input type="text" onChange={inputHandel} />
+        <button onClick={filters}>click</button>
+      </div>
+    </section>
   );
 };
 
